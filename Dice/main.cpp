@@ -1,4 +1,4 @@
-/* 
+/*
  * File:   main.cpp
  * Author: naris
  *
@@ -11,7 +11,7 @@
 #include <vector>
 #include <limits>
 #include <math.h>
-using namespace std;
+using std::cout, std::cin, std::vector, std::string;
 #define DICE_NUMS 6
 
 /*dice functions*/
@@ -20,8 +20,9 @@ using namespace std;
  * Roll one die
  * @return {int} roll total, 1-6
  */
-int roll() {
-    int roll = floor(rand() % DICE_NUMS) + 1;
+int roll()
+{
+    return floor(rand() % DICE_NUMS) + 1;
     return roll;
 }
 
@@ -30,10 +31,12 @@ int roll() {
  * @param throws {int} number of rolls
  * @return {vector} all roll results, each being 1-6
  */
-vector<int> roll(int diceThrows) {
+vector<int> roll(int diceThrows)
+{
     vector<int> rolls;
 
-    for (int i = 0; i < diceThrows; i++) {
+    for (int i = 0; i < diceThrows; i++)
+    {
         rolls.push_back(roll());
     }
 
@@ -45,7 +48,8 @@ vector<int> roll(int diceThrows) {
  * @param numDice {int} amount of dice to roll, >=1
  * @return {int} roll total, range of (1 * # of dice) to (6 * # of dice)
  */
-int rollDice(int numDice) {
+int rollDice(int numDice)
+{
     int roll = floor((rand() % (DICE_NUMS * numDice))) + numDice;
     return roll;
 }
@@ -56,10 +60,12 @@ int rollDice(int numDice) {
  * @param diceThrows {int} number of rolls
  * @return {vector} results of all rolls
  */
-vector<int> rollDice(int numDice, int diceThrows) {
+vector<int> rollDice(int numDice, int diceThrows)
+{
     vector<int> rolls;
 
-    for (int i = 0; i < diceThrows; i++) {
+    for (int i = 0; i < diceThrows; i++)
+    {
         rolls.push_back(rollDice(numDice));
     }
 
@@ -74,13 +80,16 @@ vector<int> rollDice(int numDice, int diceThrows) {
  * @param prompt {string} prompt to display to user
  * @return {int} set value arg to input and return
  */
-int getNumInput(int value, string prompt) {
+int getNumInput(int value, string prompt)
+{
     cout << prompt;
-    while (!(cin >> value)) {
-        if (cin.fail()) {
-            cout << "Numeric entry required." << endl;
+    while (!(cin >> value))
+    {
+        if (cin.fail())
+        {
+            cout << "Numeric entry required." << '\n';
             cin.clear();
-            cin.ignore(numeric_limits<int>::max(), '\n');
+            cin.ignore(std::numeric_limits<int>::max(), '\n');
         }
     }
 
@@ -94,16 +103,20 @@ int getNumInput(int value, string prompt) {
  * @param prompt {string} prompt to display to user
  * @return {int} set value arg to input and return
  */
-int getNumInput(int value, int minLimit, string prompt) {
-    do {
+int getNumInput(int value, int minLimit, string prompt)
+{
+    do
+    {
         cout << prompt;
-        while (!(cin >> value)) {
-            if (cin.fail()) {
-                cout << "Numeric entry required." << endl;
+        while (!(cin >> value))
+        {
+            if (cin.fail())
+            {
+                cout << "Numeric entry required." << '\n';
             }
 
             cin.clear();
-            cin.ignore(numeric_limits<int>::max(), '\n');
+            cin.ignore(std::numeric_limits<int>::max(), '\n');
         }
     } while (value < minLimit);
 
@@ -118,80 +131,93 @@ int getNumInput(int value, int minLimit, string prompt) {
  * @param prompt {string} prompt to display to user
  * @return {int} set value arg to input and return
  */
-int getNumInput(int value, int minLimit, int maxLimit, string prompt) {
-    do {
+int getNumInput(int value, int minLimit, int maxLimit, string prompt)
+{
+    do
+    {
         cout << prompt;
-        while (!(cin >> value)) {
-            if (cin.fail()) {
-                cout << "Numeric entry required." << endl;
+        while (!(cin >> value))
+        {
+            if (cin.fail())
+            {
+                cout << "Numeric entry required." << '\n';
             }
 
             cin.clear();
-            cin.ignore(numeric_limits<int>::max(), '\n');
+            cin.ignore(std::numeric_limits<int>::max(), '\n');
         }
     } while (value < minLimit || value > maxLimit);
 
     return value;
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
     const int minInput = 1;
-
     srand(time(0));
 
-    cout << "===Dice===" << endl;
-    int diceAmount = 0;
-    diceAmount = getNumInput(diceAmount, minInput, "Please enter number of dice: ");
-    //FIXME this stat array is crashing for larger combinations
-    int statArrSize = diceAmount * DICE_NUMS;
-    int stats[++statArrSize] = {0}; //incr to account for 0
+    cout << "===Dice===" << '\n';
+    int diceAmount = getNumInput(diceAmount, minInput, "Please enter number of dice: ");
+    // FIXME this stat array is crashing for larger combinations
+    int statArrSize = (diceAmount * DICE_NUMS) + 1;
+    int stats[statArrSize] = {0}; // incr to account for 0
 
-    int diceThrows = 0;
-    diceThrows = getNumInput(diceThrows, minInput, "Please enter number of dice throws: ");
+    int diceThrows = getNumInput(diceThrows, minInput, "Please enter number of dice throws: ");
 
-    switch (diceAmount) {
-        case 1:
+    switch (diceAmount)
+    {
+    case 1:
+    {
+        if (diceThrows == 1)
         {
-            if (diceThrows == 1) {
-                cout << "You rolled " << roll();
-            } else {
-                cout << "Rolls:" << endl;
-                vector<int> results = roll(diceThrows);
+            cout << "You rolled " << roll();
+        }
+        else
+        {
+            cout << "Rolls:" << '\n';
+            vector<int> results = roll(diceThrows);
 
-                for (auto roll : results) {
-                    cout << roll << endl;
-                    stats[roll]++;
-                }
-
-                cout << "Results: " << endl;
-                for (int i = 1; i < DICE_NUMS; i++) {
-                    cout << i << ": " << stats[i] << endl;
-                }
+            for (auto roll : results)
+            {
+                cout << roll << '\n';
+                stats[roll]++;
             }
 
-            break;
+            cout << "Results: " << '\n';
+            for (int i = 1; i < DICE_NUMS; i++)
+            {
+                cout << i << ": " << stats[i] << '\n';
+            }
         }
-        default:
+
+        break;
+    }
+    default:
+    {
+        if (diceThrows == 1)
         {
-            if (diceThrows == 1) {
-                cout << "You rolled " << rollDice(diceAmount);
-            } else {
-                cout << "Rolls:" << endl;
-                vector<int> results = rollDice(diceAmount, diceThrows);
+            cout << "You rolled " << rollDice(diceAmount);
+        }
+        else
+        {
+            cout << "Rolls:" << '\n';
+            vector<int> results = rollDice(diceAmount, diceThrows);
 
-                for (auto roll : results) {
-                    cout << roll << endl;
-                    stats[roll]++;
-                }
-
-                cout << "Results: " << endl;
-                for (int i = diceAmount; i < statArrSize; i++) {
-                    cout << i << ": " << stats[i] << endl;
-                }
+            for (auto roll : results)
+            {
+                cout << roll << '\n';
+                stats[roll]++;
             }
 
-            break;
+            cout << "Results: " << '\n';
+            for (int i = diceAmount; i < statArrSize; i++)
+            {
+                cout << i << ": " << stats[i] << '\n';
+            }
         }
+
+        break;
+    }
     }
 
     return 0;
