@@ -23,7 +23,6 @@ using std::cout, std::cin, std::vector, std::string;
 int roll()
 {
     return floor(rand() % DICE_NUMS) + 1;
-    return roll;
 }
 
 /**
